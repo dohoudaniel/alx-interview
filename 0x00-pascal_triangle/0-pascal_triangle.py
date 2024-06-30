@@ -35,6 +35,6 @@ def pascal_triangle(n):
                 # This is where the magic of appending the two previous
                 # numbers above it works
                 emptyArray.append(temp[j] + temp[j + 1])
-            print(emptyArray)
+            # print(emptyArray)
             finalArray.append(emptyArray)
         return finalArray
