@@ -4,6 +4,9 @@ A Python module that prints the
 Pascal's Triangle based on the number
 it is called with.
 This is an attempt to solve an #ALX_SE interview question
+
+I'll come back to this question to see if
+it can be solved using recursion
 """
 
 
