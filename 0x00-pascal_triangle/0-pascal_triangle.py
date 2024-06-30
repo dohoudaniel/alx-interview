@@ -31,7 +31,8 @@ def pascal_triangle(n):
             # the value of the last index of finalArray
             # It stores [0, valueOfLastIndex, 0]
             temp = [0] + finalArray[-1] + [0]
-            emptyArray = [] # An empty array that will always be used to append to
+            # An empty array that will always be used to append to
+            emptyArray = []
             for j in range(len(finalArray[-1]) + 1):
                 # This is where the magic of appending the two previous
                 # numbers above it works
