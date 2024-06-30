@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 A Python module that prints the
 Pascal's Triangle based on the number
