@@ -1,71 +1,50 @@
 #!/usr/bin/python3
 """
-Log Parsing
+Log parsing
 """
+
+
+# Import statements
 import sys
-import re
 
+status_codes_dict = {'200': 0, '301': 0, '400': 0, '401': 0, '403': 0,
+                     '404': 0, '405': 0, '500': 0}
 
-ip_pat = r".+"
-date_pat = r"\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+\]"
-status_pat = r".+"
-size_pat = r"\d+"
-pattern = re.compile((
-    f'(?P<ip>{ip_pat})\\s?-\\s?(?P<date>{date_pat})'
-    f' "GET /projects/260 HTTP/1.1" (?P<status>{status_pat})'
-    f' (?P<size>{size_pat})'
-))
+total_size = 0
+count = 0
 
-recognized_codes = (200, 301, 400, 401, 403, 404, 405, 500)
+try:
+    for line in sys.stdin:
+        line_list = line.split(" ")
 
+        if len(line_list) > 4:
+            status_code = line_list[-2]
+            file_size = int(line_list[-1])
 
-def main():
-    """
-    The main function
-    """
+            #
+            if status_code in status_codes_dict.keys():
+                status_codes_dict[status_code] += 1
 
-    total_size = 0
-    count = 0
-    status_map = {}
+            #
+            total_size += file_size
 
-    def print_stats():
-        print(f"File size: {total_size}")
-        for status in recognized_codes:
-            if status not in status_map:
-                continue
-            print(f"{status}: {status_map[status]}")
+            #
+            count += 1
 
-    def process_line(line: str):
-        nonlocal count, total_size
-
-        match = pattern.match(line)
-        if not match:
-            return
-        total_size += int(match["size"])
-        try:
-            status = int(match["status"])
-            status_map.setdefault(status, 0)
-            status_map[status] += 1
-        except ValueError:
-            pass
-        count += 1
-
-    while 1:
         if count == 10:
-            print_stats()
-            count = 0
+            count = 0  # reset count
+            print('File size: {}'.format(total_size))
 
-        try:
-            line = sys.stdin.readline()
-            if not line:
-                print_stats()
-                break
-            process_line(line)
-        except KeyboardInterrupt:
-            count = 0
-            print_stats()
-            raise
+            #
+            for key, value in sorted(status_codes_dict.items()):
+                if value != 0:
+                    print('{}: {}'.format(key, value))
 
+except Exception as err:
+    pass
 
-if __name__ == "__main__":
-    main()
+finally:
+    print('File size: {}'.format(total_size))
+    for key, value in sorted(status_codes_dict.items()):
+        if value != 0:
+            print('{}: {}'.format(key, value))
