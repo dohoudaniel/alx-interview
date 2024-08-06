@@ -3,6 +3,7 @@
 Prime game
 """
 
+
 def isWinner(x, nums):
     """
     Returns the winner
